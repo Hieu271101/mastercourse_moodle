@@ -6,22 +6,22 @@
     $context = context_system::instance();
     require_capability('local/message:managemessages', $context);
 
-    $PAGE->set_url(new moodle_url('/local/message/enrolmastercourse.php'));
+    $PAGE->set_url(new moodle_url('/local/message/unenrolmastercourse.php'));
     $PAGE->set_context(\context_system::instance());
-    $PAGE->set_title('Enrol master course');
-    $PAGE->set_heading('Enrol Master Course');
+    $PAGE->set_title('Unenrol master course');
+    $PAGE->set_heading('Unenrol Master Course');
     // $PAGE->requires->js_call_amd('local_message/confirm');
     // $PAGE->requires->css('/local/message/styles.css');
     $PAGE->add_body_class('limitedwidth');
     
     require_once($CFG->dirroot.'/local/mastercourse/classes/manager.php');
-    require_once($CFG->dirroot.'/local/mastercourse/classes/form/edit.php');
+    require_once($CFG->dirroot.'/local/mastercourse/classes/form/unenrolmastercourse.php');
     require_once($CFG->dirroot.'/local/mastercourse/classes/form/addcourseform.php');
     $messages = $DB->get_records('local_message', null, 'id');
     
     $messageid = optional_param('mastercourseid', null, PARAM_INT);
 
-    $mform = new edit();
+    $mform = new unenrolmastercourseform();
     $addform = new addcourseform();
 
     if ($messageid) {
@@ -49,8 +49,6 @@
     redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('created_form', 'local_message') . $fromform->messagetext);
     }
 
-    
-
     echo $OUTPUT->header();
     $mform->display();
     
@@ -58,11 +56,10 @@
     // $users = 
 
     $templatecontext = (object)[
-        // 'users' => 
+        'users' => array_values((array)$users),
         'mastercourse' => array_values((array)$items),
         'viewurl' => new moodle_url('/local/mastercourse/enrolmastercourse.php'),
     ];
-    
     echo $OUTPUT->render_from_template('local_mastercourse/listuser', $templatecontext);
-    echo $OUTPUT->render_from_template('local_mastercourse/index', $templatecontext);
+
     echo $OUTPUT->footer();

@@ -7,7 +7,7 @@
     <div class="card dashboard-card" role="listitem"
     data-region="course-content"
     data-course-id="{id}">
-    <a href="{{viewurl}}?categoryid={{id}}" tabindex="-1">
+    <a href="{{viewurl}}?mastercourseid={{id}}" tabindex="-1">
         <div class="card-img dashboard-card-img" style='background-image: url("{courseimage}");'>
             <span class="sr-only">#straria:courseimage, core_course/str</span>
         </div>
@@ -15,6 +15,8 @@
     <div class="card-body pr-1 course-info-container" id="course-info-container-id-uniqid">
         <div class="d-flex align-items-start">
             <div class="w-100 text-truncate">
+                {{name}}
+                {{fullname}}
                 #showshortname
                     <div class="text-muted muted d-flex mb-1 flex-wrap">
                         <span class="sr-only">

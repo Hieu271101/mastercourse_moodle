@@ -6,17 +6,28 @@ use dml_exception;
 use stdClass;
 
 class manager {
+    
+    public function enrol_mastercourse_byemail(string $email, string $roleid,  $idmastercourse): bool
+    {   
+        global $DB;        
+        $user =   $DB->get_record_sql('SELECT id FROM `mdl_user` WHERE `mdl_user`.`email` = '.$email);
+        $iduser = $user->id;
+        return  $this->enrol_mastercourse( $iduser,  $roleid,  $idmastercourse);
+
+    }
+
 
     public function enrol_mastercourse(string $iduser, string $roleid,  $idmastercourse): bool
     {                 
-
         global $DB;
+
+
         $record_to_insert = new stdClass();        
         $record_to_insert->role_id = $roleid;
         $record_to_insert->id_user = $iduser;
-        $courseshasmastercourseid =  (array)$DB->get_records_sql('SELECT id FROM `mdl_course` WHERE `mdl_course`.`id_mastercourse` = '.$idmastercourse);
         $record_to_insert->id_mastercourse = $idmastercourse;
- 
+        
+        $courseshasmastercourseid =  (array)$DB->get_records_sql('SELECT id FROM `mdl_course` WHERE `mdl_course`.`id_mastercourse` = '.$idmastercourse);
         foreach ($courseshasmastercourseid as $value) {
  
               $this->enrol_try_internal_enrol($value->id,$iduser, $roleid, $timestart = 0, $timeend = 0); //enrol_try_internal_enrol($courseid, $userid, $roleid = null, $timestart = 0, $timeend = 0)

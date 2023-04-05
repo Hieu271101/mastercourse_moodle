@@ -17,8 +17,21 @@
     require_once($CFG->dirroot.'/local/mastercourse/classes/manager.php');
     require_once($CFG->dirroot.'/local/mastercourse/classes/form/unenrolmastercourse.php');
     require_once($CFG->dirroot.'/local/mastercourse/classes/form/addcourseform.php');
-    $messages = $DB->get_records('local_message', null, 'id');
     
+    $ueid    = required_param('ue', PARAM_INT); // user enrolment id
+    $confirm = optional_param('confirm', false, PARAM_BOOL);
+    $filter  = optional_param('ifilter', 0, PARAM_INT);
+    
+
+    $ue = $DB->get_record('user_enrolments', array('id' => $ueid), '*', MUST_EXIST);
+    $user = $DB->get_record('user', array('id'=>$ue->userid), '*', MUST_EXIST);
+    $instance = $DB->get_record('enrol', array('id'=>$ue->enrolid), '*', MUST_EXIST);
+    $course = $DB->get_record('course', array('id'=>$instance->courseid), '*', MUST_EXIST);    
+    $context = context_course::instance($course->id);
+
+
+
+
     $messageid = optional_param('mastercourseid', null, PARAM_INT);
 
     $mform = new unenrolmastercourseform();

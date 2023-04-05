@@ -14,10 +14,10 @@ class edit extends moodleform {
         
         $mform->addElement('hidden', 'id', 'Enter id master course: '); // Add elements to your form
         $mform->setType('id', PARAM_NOTAGS);         
-        $mform->setDefault('id', 'Please enter name of user');        //Default value
+        $mform->setDefault('id', '');        //Default value
 
-        $mform->addElement('text', 'idmastercourse', 'Enter user');
-        $mform->setType('idmastercourse', PARAM_INT);
+        $mform->addElement('text', 'iduser', 'Enter user');
+        $mform->setType('iduser', PARAM_NOTAGS);
         
                 //Set type of element
         

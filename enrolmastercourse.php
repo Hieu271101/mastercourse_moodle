@@ -44,7 +44,7 @@
     
     // $manager->enrol_mastercourse($fromform->id, $fromform->roleid, $fromform->idmastercourse);   
     
-    $manager->enrol_mastercourse_byemail($fromform->id, $fromform->roleid, $fromform->idmastercourse); 
+    $manager->enrol_mastercourse_byemail($fromform->id, $fromform->roleid, $fromform->iduser); 
     // // Go back to manage.php page
     redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('created_form', 'local_message') . $fromform->messagetext);
     }
@@ -55,14 +55,18 @@
     $mform->display();
     
     $items = $DB->get_records('course', ['id_mastercourse' => $messageid]);
-    // $users = 
+    $users = $DB->get_records_sql('SELECT `mdl_user`.username  
+                                 FROM `mdl_user_enrol_mastercourse` 
+                                 INNER JOIN `mdl_user` 
+                                 ON `mdl_user`.`id` =`mdl_user_enrol_mastercourse`.`id_user`  
+                                 WHERE `mdl_user_enrol_mastercourse`.`id_mastercourse`='.$messageid);
 
     $templatecontext = (object)[
-        // 'users' => 
+        'users' => array_values((array)$users),
         'mastercourse' => array_values((array)$items),
         'viewurl' => new moodle_url('/local/mastercourse/enrolmastercourse.php'),
     ];
-    
+
     echo $OUTPUT->render_from_template('local_mastercourse/listuser', $templatecontext);
     echo $OUTPUT->render_from_template('local_mastercourse/index', $templatecontext);
     echo $OUTPUT->footer();

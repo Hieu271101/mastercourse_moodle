@@ -7,17 +7,18 @@ use stdClass;
 
 class manager {
     
-    public function enrol_mastercourse_byemail(string $email, string $roleid,  $idmastercourse): bool
+    public function enrol_mastercourse_byemail(string $idmastercourse, string $roleid,  $email): bool
     {   
         global $DB;        
-        $user =   $DB->get_record_sql('SELECT id FROM `mdl_user` WHERE `mdl_user`.`email` = '.$email);
+        
+        $user =   $DB->get_record_sql('SELECT id FROM `mdl_user` WHERE `mdl_user`.`email` = '.  '\''.$email. '\'');
         $iduser = $user->id;
-        return  $this->enrol_mastercourse( $iduser,  $roleid,  $idmastercourse);
+        return  $this->enrol_mastercourse( $idmastercourse,  $roleid,  $iduser);
 
     }
 
 
-    public function enrol_mastercourse(string $iduser, string $roleid,  $idmastercourse): bool
+    public function enrol_mastercourse(string $idmastercourse, string $roleid,  $iduser): bool
     {                 
         global $DB;
 

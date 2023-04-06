@@ -1,8 +1,4 @@
 <?php
-
-// use local_mastercourse\form\edit;
-// use local_mastercourse\manager;
-    
     require_once(__DIR__ . '/../../config.php');
 
     global $DB;
@@ -31,25 +27,12 @@
 
     } else if ($fromform = $mform->get_data()) {
     $manager = new manager();
-
-    // if ($fromform->id) {
-    //     // We are updating an existing message.
-    //     $manager->update_message($fromform->id, $fromform->messagetext, $fromform->messagetype);
-    //     redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('updated_form', 'local_message') . $fromform->messagetext);
-    // }
-
-     $manager->createmastercourse($fromform->namemastercourse);
+    $manager->createmastercourse($fromform->namemastercourse);
 
     // Go back to manage.php page
     redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('created_form', 'local_message') . $fromform->messagetext);
     }
-
-   
-
     echo $OUTPUT->header();
     $mform->display();
-    
-    
-
     echo $OUTPUT->footer();
  

@@ -71,7 +71,7 @@ $mastercourse = $DB->get_records('course_master', null, 'id');
 
 $templatecontext = (object)[
     'mastercourse' => array_values($mastercourse),
-    'viewurl' => new moodle_url('/local/mastercourse/enrolmastercourse.php'),
+    'viewurl' => new moodle_url('/local/mastercourse/managemastercourse.php'),
 ];
 
 echo $OUTPUT->render_from_template('local_mastercourse/index', $templatecontext);

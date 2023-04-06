@@ -125,7 +125,7 @@ class manager {
 
     }
 
-    function unenrol_try_internal_unenrol($courseid, $userid, $roleid = null, $timestart = 0, $timeend = 0) {
+    function unenrol_try_internal_unenrol($courseid, $userid) {
         global $DB;
     
         //note: this is hardcoded to manual plugin for now

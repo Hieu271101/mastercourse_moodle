@@ -40,6 +40,8 @@
         }
         // $mform->set_data($message);
         
+    } else {
+        redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('cancelled_form', 'local_message'));
     }
 
     if ($addform->is_cancelled()) {
@@ -48,16 +50,9 @@
 
     } else if ($fromform = $addform->get_data()) {
     $manager = new manager();
-
-    // if ($fromform->id) {
-    //     // We are updating an existing message.
-    //     $manager->update_message($fromform->id, $fromform->messagetext, $fromform->messagetype);
-    //     redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('updated_form', 'local_message') . $fromform->messagetext);
-    // }
-
     $manager->addcourse($fromform->idcourse, $fromform->id);
 
-    // Go back to manage.php page
+    // Go back to index.php page
     redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('created_form', 'local_message') . $fromform->messagetext);
     }
 

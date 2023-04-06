@@ -32,20 +32,17 @@
         $mform->set_data($message);
   
         
+    } else {
+        redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('cancelled_form', 'local_message'));
     }
-    // die;
     if ($mform->is_cancelled()) {
     // Go back to manage.php page
     redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('cancelled_form', 'local_message'));
-
     } 
     else if ($fromform = $mform->get_data()) {
     $manager = new manager();
-    
-    // $manager->enrol_mastercourse($fromform->id, $fromform->roleid, $fromform->idmastercourse);   
-    
     $manager->enrol_mastercourse_byemail($fromform->id, $fromform->roleid, $fromform->iduser); 
-    // // Go back to manage.php page
+    // // Go back to index.php page
     redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('created_form', 'local_message') . $fromform->messagetext);
     }
 

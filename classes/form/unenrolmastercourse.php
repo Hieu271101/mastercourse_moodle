@@ -12,12 +12,12 @@ class unenrolmastercourseform extends moodleform {
         global $CFG;
         $mform = $this->_form; // Don't forget the underscore!
         
-        $mform->addElement('hidden', 'id', 'Enter id master course: '); // Add elements to your form
+        $mform->addElement('text', 'id', 'Enter id master course: '); // Add elements to your form
         $mform->setType('id', PARAM_NOTAGS);         
         $mform->setDefault('id', 'Please enter name of user');        //Default value
 
-        $mform->addElement('text', 'idmastercourse', 'Enter user');
-        $mform->setType('idmastercourse', PARAM_INT);
+        $mform->addElement('text', 'iduser', 'Enter user');
+        $mform->setType('iduser', PARAM_INT);
 
 
         $this->add_action_buttons();

@@ -49,13 +49,11 @@
     redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('created_form', 'local_message') . $fromform->messagetext);
     }
 
-    
-
     echo $OUTPUT->header();
     $mform->display();
     
     $items = $DB->get_records('course', ['id_mastercourse' => $messageid]);
-    $users = $DB->get_records_sql('SELECT `mdl_user`.username  
+    $users = $DB->get_records_sql('SELECT *
                                  FROM `mdl_user_enrol_mastercourse` 
                                  INNER JOIN `mdl_user` 
                                  ON `mdl_user`.`id` =`mdl_user_enrol_mastercourse`.`id_user`  

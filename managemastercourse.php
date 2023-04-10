@@ -53,6 +53,13 @@
 
     echo $OUTPUT->header();
     $mastercourse = $DB->get_records('course_master', ['id' => $messageid]);
+    $courses = $DB->get_records('course', ['id_mastercourse' => $messageid]);
+  
+    $course = $DB->get_records_sql('SELECT *
+                                    FROM `mdl_coursemaster_course` 
+                                    INNER JOIN `mdl_course` 
+                                    ON `mdl_course`.`id` = `mdl_coursemaster_course`.`id_course`  
+                                    WHERE `mdl_coursemaster_course`.`id_mastercourse`= '.$messageid);
     $users = $DB->get_records_sql('SELECT *
                                  FROM `mdl_user_enrol_mastercourse` 
                                  INNER JOIN `mdl_user` 
@@ -64,15 +71,15 @@
         // 'id' => array_values((array)$messageid),
         'users' => array_values((array)$users),
         'mastercourse' => array_values((array)$mastercourse),
-        
-        'addcourse' => new moodle_url('/local/mastercourse/addcourse.php'),
+        'courses' => array_values((array)$course),
+        'addcourse' => new moodle_url('/local/mastercourse/addcourses.php'),
         'createmastercoursecourse' => new moodle_url('/local/mastercourse/createmastercourse.php'),
-        'enrolmastercourse' => new moodle_url('/local/mastercourse/enrolmastercourse.php'),
+        'enrolmastercourse' => new moodle_url('/local/mastercourse/enrolmastercourses.php'),
         'unenrolmastercourse' => new moodle_url('/local/mastercourse/unenrolmastercourse.php'),
     ];
     echo $OUTPUT->render_from_template('local_mastercourse/manage', $templatecontext);
     echo $OUTPUT->render_from_template('local_mastercourse/listuser', $templatecontext);
-    echo $OUTPUT->render_from_template('local_mastercourse/index', $templatecontext);
+    echo $OUTPUT->render_from_template('local_mastercourse/listcourse', $templatecontext);
 
     
     echo $OUTPUT->footer();

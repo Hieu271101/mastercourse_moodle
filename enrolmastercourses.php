@@ -1,5 +1,6 @@
 <?php
     require_once(__DIR__ . '/../../config.php');
+
     global $DB;
     
     require_login();
@@ -7,24 +8,32 @@
     $context = context_system::instance();
     require_capability('local/message:managemessages', $context);
 
-    $PAGE->set_url(new moodle_url('/local/mastercourse/addcourse.php'));
+    $PAGE->set_url(new moodle_url('/local/message/enrolmastercourses.php'));
     $PAGE->set_context(\context_system::instance());
-    $PAGE->set_title('Add course');
-    $PAGE->set_heading('Add Course');
+    $PAGE->set_title('Enrol master course');
+    $PAGE->set_heading('Enrol Master Course');
     $PAGE->requires->js_call_amd('local_message/confirm');
     $PAGE->requires->css('/local/message/styles.css');
     $PAGE->add_body_class('limitedwidth');
-
     require_once($CFG->dirroot.'/local/mastercourse/classes/manager.php');
-    require_once($CFG->dirroot.'/local/mastercourse/classes/form/addcourseform.php');
-    
-    // $messages = $DB->get_records('local_message', null, 'id');
+    require_once($CFG->dirroot.'/local/mastercourse/classes/form/edit.php');
     
     $mastercourseid = optional_param('mastercourseid', null, PARAM_INT);
+    // this is form of enrol user
+    $mform = new edit();
     
-    // this is add course to mastercourse
-    $addform = new addcourseform();
-   
+    if ($mform->is_cancelled()) {
+    // Go back to manage.php page
+    redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('cancelled_form', 'local_message'));
+
+    } else if ($fromform = $mform->get_data()) {
+    $manager = new manager();
+    $manager->enrol_mastercourse_byemail($fromform->id, $fromform->roleid, $fromform->iduser); 
+
+    // Go back to manage.php page
+    redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('created_form', 'local_message') . $fromform->messagetext);
+    }
+
     if ($mastercourseid) {
         // Add extra data to the form.
    
@@ -32,7 +41,7 @@
         $manager = new manager();
         $message = $manager->get_course($mastercourseid);
         // $fform->idmastercourse = $messageid;
-        $addform->set_data($message);
+        $mform->set_data($message);
         // $edit = new edit();
         // $message = $manager->idmastercourse($messageid);
         if (!$message) {
@@ -45,26 +54,18 @@
         redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('cancelled_form', 'local_message'));
     }
 
-    if ($addform->is_cancelled()) {
-    // Go back to manage.php page
-    redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('cancelled_form', 'local_message'));
-
-    } else if ($fromform = $addform->get_data()) {
-    $manager = new manager();
-    $manager->addcourse($fromform->idcourse, $fromform->id);
-
-    // Go back to index.php page
-    redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('created_form', 'local_message') . $fromform->messagetext);
+    if ($mastercourseid) {
+        // Add extra data to the form.
+        global $DB;
+        $manager = new manager();
+        $message = $manager->get_course($mastercourseid);
+        $mform->set_data($message);
+  
+        
+    } else {
+        redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('cancelled_form', 'local_message'));
     }
-
     echo $OUTPUT->header();
-    $addform->display();
-
-    $templatecontext = (object)[
-        'viewurl' => new moodle_url('/local/mastercourse/enrolmastercourse.php'),
-    ];
-    
-    echo $OUTPUT->render_from_template('local_mastercourse/index', $templatecontext);
-
+    $mform->display();
     echo $OUTPUT->footer();
-    
+ 

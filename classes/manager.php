@@ -28,7 +28,11 @@ class manager {
         $record_to_insert->id_user = $iduser;
         $record_to_insert->id_mastercourse = $idmastercourse;
         
-        $courseshasmastercourseid =  (array)$DB->get_records_sql('SELECT id FROM `mdl_course` WHERE `mdl_course`.`id_mastercourse` = '.$idmastercourse);
+        $courseshasmastercourseid =  (array)$DB->get_records_sql('SELECT `mdl_course`.`id`, `mdl_course`.`fullname`
+                                                                    FROM `mdl_coursemaster_course` 
+                                                                    INNER JOIN `mdl_course` 
+                                                                    ON `mdl_course`.`id` = `mdl_coursemaster_course`.`id_course`  
+                                                                    WHERE `mdl_coursemaster_course`.`id_mastercourse`= '.$idmastercourse);
         foreach ($courseshasmastercourseid as $value) {
  
               $this->enrol_try_internal_enrol($value->id,$iduser, $roleid, $timestart = 0, $timeend = 0); //enrol_try_internal_enrol($courseid, $userid, $roleid = null, $timestart = 0, $timeend = 0)
@@ -77,14 +81,14 @@ class manager {
     public function addcourse(int $idcourse, int $idmastercourse): bool
     {
         global $DB;
-        $course = $this->get_course($idcourse);
+        // $course = $this->get_course($idcourse);
       
         $record_to_insert = new stdClass();
-        $record_to_insert->id = $course->id;       
+        $record_to_insert->id_course = $idcourse;       
         $record_to_insert->id_mastercourse = $idmastercourse;
         try {
-            return $DB->update_record('course', $record_to_insert);
-            
+            // return $DB->update_record('course', $record_to_insert);
+            return $DB->insert_record('coursemaster_course', $record_to_insert, false);
           } catch (dml_exception $e) {
             return false;
         }
@@ -103,7 +107,15 @@ class manager {
         list($ids, $params) = $DB->get_in_or_equal($messageids);
         return $DB->set_field_select('course', 'requested', $idmastercourse, "id $ids", $params);
     }
+    public function unenrol_mastercourse_byemail(string $idmastercourse,  $email)
+    {   
+        global $DB;        
+        
+        $user =   $DB->get_record_sql('SELECT id FROM `mdl_user` WHERE `mdl_user`.`email` = '.  '\''.$email. '\'');
+        $iduser = $user->id;
+        return  $this->unenrol_mastercourse( $idmastercourse,  $iduser);
 
+    }
     public function unenrol_mastercourse($idmastercourse, $iduser)
     {   
         global $DB, $CFG;
@@ -116,7 +128,11 @@ class manager {
 
         
         
-        $courseshasmastercourseid =  (array)$DB->get_records_sql('SELECT id FROM `mdl_course` WHERE `mdl_course`.`id_mastercourse` = '.$idmastercourse);
+        $courseshasmastercourseid =  (array)$DB->get_records_sql('SELECT `mdl_course`.`id`, `mdl_course`.`fullname`
+                                                                    FROM `mdl_coursemaster_course` 
+                                                                    INNER JOIN `mdl_course` 
+                                                                    ON `mdl_course`.`id` = `mdl_coursemaster_course`.`id_course`  
+                                                                    WHERE `mdl_coursemaster_course`.`id_mastercourse`= '.$idmastercourse);
         
         foreach ($courseshasmastercourseid as $value) {
        

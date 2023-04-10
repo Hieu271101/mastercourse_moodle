@@ -34,6 +34,18 @@
     
     $mform = new unenrolmastercourseform();
 
+    if ($mform->is_cancelled()) {
+        // Go back to manage.php page
+        redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('cancelled_form', 'local_message'));
+    
+    } else if ($fromform = $mform->get_data()) {
+        $manager = new manager();
+        // $manager->enrol_mastercourse_byemail($fromform->id, $fromform->roleid, $fromform->iduser); 
+        $manager->unenrol_mastercourse($fromform->id, $fromform->iduser); 
+        // Go back to manage.php page
+        redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('created_form', 'local_message') . $fromform->messagetext);
+    }
+
     if ($messageid) {
         // Add extra data to the form.
         global $DB;
@@ -44,17 +56,17 @@
         redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('cancelled_form', 'local_message'));
     }
   
-    if ($mform->is_cancelled()) {
-    // Go back to manage.php page
-    redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('cancelled_form', 'local_message'));
-
-    } 
-    else if ($fromform = $mform->get_data()) {
-    $manager = new manager();
-    $manager->unenrol_mastercourse($fromform->id, $fromform->iduser); 
+    // if ($mform->is_cancelled()) {
     // // Go back to manage.php page
-    redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('created_form', 'local_message') . $fromform->messagetext);
-    }
+    // redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('cancelled_form', 'local_message'));
+
+    // } 
+    // else if ($fromform = $mform->get_data()) {
+    // $manager = new manager();
+    // $manager->unenrol_mastercourse($fromform->id, $fromform->iduser); 
+    // // // Go back to manage.php page
+    // redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('created_form', 'local_message') . $fromform->messagetext);
+    // }
 
     echo $OUTPUT->header();
     $mform->display();

@@ -1,0 +1,61 @@
+
+
+<div class="card-deck dashboard-card-deck one-row" data-region="items-list" role="list">
+    #items
+    {{#courses}}
+
+    <div class="card dashboard-card" role="listitem"
+    data-region="course-content"
+    data-course-id="{id}">
+    <a href="{{viewurl}}?mastercourseid={{id}}" tabindex="-1">
+        <div class="card-img dashboard-card-img" style='background-image: url("{courseimage}");'>
+            <span class="sr-only">#straria:courseimage, core_course/str</span>
+        </div>
+    </a>
+    <div class="card-body pr-1 course-info-container" id="course-info-container-id-uniqid">
+        <div class="d-flex align-items-start">
+            <div class="w-100 text-truncate">
+                {{name}}
+                {{fullname}}
+                #showshortname
+                    <div class="text-muted muted d-flex mb-1 flex-wrap">
+                        <span class="sr-only">
+                            #straria:courseshortname, core_course/str
+                        </span>
+                        <div>
+                            {shortname}
+                        </div>
+                        $divider/divider
+                    </div>
+                /showshortname
+                
+                <a href="{{viewurl}}" class="aalink coursename mr-2 mb-1">
+                    > core_course/favouriteicon 
+                    <span class="sr-only">
+                            #straria:coursename, core_course/str
+                        </span>
+                    $coursename/coursename
+                </a>
+                <div class="text-muted muted d-flex flex-wrap">
+                    $coursecategory/coursecategory
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="d-flex align-items-start">
+        $progress/progress
+        $menu/menu
+    </div>
+</div> 
+
+
+{{/courses}}
+    /items
+
+
+    
+
+    
+
+</div>

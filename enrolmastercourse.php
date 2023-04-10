@@ -22,7 +22,7 @@
     $messageid = optional_param('mastercourseid', null, PARAM_INT);
 
     $mform = new edit();
-    $addform = new addcourseform();
+  
 
     if ($messageid) {
         // Add extra data to the form.
@@ -35,6 +35,7 @@
     } else {
         redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('cancelled_form', 'local_message'));
     }
+    
     if ($mform->is_cancelled()) {
     // Go back to manage.php page
     redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('cancelled_form', 'local_message'));
@@ -65,3 +66,9 @@
     echo $OUTPUT->render_from_template('local_mastercourse/listuser', $templatecontext);
     echo $OUTPUT->render_from_template('local_mastercourse/index', $templatecontext);
     echo $OUTPUT->footer();
+
+
+
+
+
+    

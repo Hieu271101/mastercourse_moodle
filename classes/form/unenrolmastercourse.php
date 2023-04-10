@@ -15,10 +15,8 @@ class unenrolmastercourseform extends moodleform {
         $mform->addElement('text', 'id', 'Enter id master course: '); // Add elements to your form
         $mform->setType('id', PARAM_NOTAGS);         
         $mform->setDefault('id', 'Please enter name of user');        //Default value
-
         $mform->addElement('text', 'iduser', 'Enter user');
         $mform->setType('iduser', PARAM_INT);
-
 
         $this->add_action_buttons();
     }
@@ -26,6 +24,5 @@ class unenrolmastercourseform extends moodleform {
     function validation($data, $files) {
         return array();
     }
-    
-   
+
 }

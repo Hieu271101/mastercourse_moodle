@@ -6,7 +6,7 @@
     $context = context_system::instance();
     require_capability('local/message:managemessages', $context);
 
-    $PAGE->set_url(new moodle_url('/local/message/enrolmastercourse.php'));
+    $PAGE->set_url(new moodle_url('/local/mastercourse/enrolmastercourse.php'));
     $PAGE->set_context(\context_system::instance());
     $PAGE->set_title('Enrol master course');
     $PAGE->set_heading('Enrol Master Course');

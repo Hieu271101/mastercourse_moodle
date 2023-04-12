@@ -32,18 +32,18 @@ $heading = 'Master course';
 if ($categoryid) {
     $category = core_course_category::get($categoryid); // This will validate access.
     $PAGE->set_category_by_id($categoryid);
-    $PAGE->set_url(new moodle_url('/mastercourse/index.php', array('categoryid' => $categoryid)));
+    $PAGE->set_url(new moodle_url('local/mastercourse/index.php', array('categoryid' => $categoryid)));
     $PAGE->set_pagetype('course-index-category');
     $heading = $category->get_formatted_name();
 } else if ($category = core_course_category::user_top()) {
     // Check if there is only one top-level category, if so use that.
     $categoryid = $category->id;
-    $PAGE->set_url('/mastercourse/index.php');
+    $PAGE->set_url('/local/mastercourse/index.php');
     if ($category->is_uservisible() && $categoryid) {
         $PAGE->set_category_by_id($categoryid);
         $PAGE->set_context($category->get_context());
         if (!core_course_category::is_simple_site()) {
-            $PAGE->set_url(new moodle_url('/mastercourse/index.php', array('categoryid' => $categoryid)));
+            $PAGE->set_url(new moodle_url('local/mastercourse/index.php', array('categoryid' => $categoryid)));
             $heading = $category->get_formatted_name();
         }
     } else {

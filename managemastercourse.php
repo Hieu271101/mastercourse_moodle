@@ -63,8 +63,8 @@
     $users = $DB->get_records_sql('SELECT *
                                  FROM `mdl_user_enrol_mastercourse` 
                                  INNER JOIN `mdl_user` 
-                                 ON `mdl_user`.`id` =`mdl_user_enrol_mastercourse`.`id_user`  
-                                 WHERE `mdl_user_enrol_mastercourse`.`id_mastercourse`='.$messageid);
+                                 ON `mdl_user`.`id` = `mdl_user_enrol_mastercourse`.`id_user`  
+                                 WHERE `mdl_user_enrol_mastercourse`.`id_mastercourse`= '.$messageid);
 
 
     $templatecontext = (object)[
@@ -72,7 +72,8 @@
         'users' => array_values((array)$users),
         'mastercourse' => array_values((array)$mastercourse),
         'courses' => array_values((array)$course),
-        'addcourse' => new moodle_url('/local/mastercourse/addcourses.php'),
+        'addcourse' => new moodle_url('/local/mastercourse/addcourse.php'),
+        'deletecourse'  => new moodle_url('/local/mastercourse/deletecourse.php'),
         'createmastercoursecourse' => new moodle_url('/local/mastercourse/createmastercourse.php'),
         'enrolmastercourse' => new moodle_url('/local/mastercourse/enrolmastercourses.php'),
         'unenrolmastercourse' => new moodle_url('/local/mastercourse/unenrolmastercourse.php'),

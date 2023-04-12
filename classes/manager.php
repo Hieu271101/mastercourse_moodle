@@ -7,6 +7,18 @@ use stdClass;
 
 class manager {
     
+    public function createmastercourse(string $name): bool
+    {
+         global $DB;
+          $record_to_insert = new stdClass();
+          $record_to_insert->name = $name;
+          try {
+             return $DB->insert_record('course_master', $record_to_insert, false);
+            } catch (dml_exception $e) {
+              return false;
+          }
+    }
+
     public function enrol_mastercourse_byemail(string $idmastercourse, string $roleid,  $email): bool
     {   
         global $DB;        
@@ -44,17 +56,7 @@ class manager {
               return false;
           }
     }
-    public function createmastercourse(string $name): bool
-    {
-         global $DB;
-          $record_to_insert = new stdClass();
-          $record_to_insert->name = $name;
-          try {
-             return $DB->insert_record('course_master', $record_to_insert, false);
-            } catch (dml_exception $e) {
-              return false;
-          }
-    }
+    
 
     function enrol_try_internal_enrol($courseid, $userid, $roleid = null, $timestart = 0, $timeend = 0) {
         global $DB;
@@ -78,7 +80,7 @@ class manager {
         return true;
     }
     
-    public function addcourse(int $idcourse, int $idmastercourse): bool
+    public function addcourse(string $idcourse, int $idmastercourse)
     {
         global $DB;
         // $course = $this->get_course($idcourse);
@@ -86,15 +88,99 @@ class manager {
         $record_to_insert = new stdClass();
         $record_to_insert->id_course = $idcourse;       
         $record_to_insert->id_mastercourse = $idmastercourse;
+        
+        if ($ue = $DB->get_record('coursemaster_course', array('id_mastercourse'=>$idmastercourse, 'id_course'=>$idcourse))) {
+            // weird, user not enrolled
+            return false;
+        }
+        
         try {
             // return $DB->update_record('course', $record_to_insert);
-            return $DB->insert_record('coursemaster_course', $record_to_insert, false);
+            $DB->insert_record('coursemaster_course', $record_to_insert, false);
           } catch (dml_exception $e) {
             return false;
         }
-      
+        
+        //add user enrol to new course
+        //check user is enrol course
+        //get user who enrol this course
+        $users = $DB->get_records_sql(' SELECT DISTINCT  `mdl_user`.id,`mdl_user`.`username`, `mdl_user`.email
+                                        FROM `mdl_user_enrol_mastercourse` 
+                                        INNER JOIN `mdl_user` 
+                                        ON `mdl_user`.`id` =`mdl_user_enrol_mastercourse`.`id_user`  
+                                        WHERE `mdl_user_enrol_mastercourse`.`id_mastercourse` =' . $idmastercourse);
+        
+        foreach ($users as $user) {
+            if (!$instances = $DB->get_records('enrol', array('enrol'=>'manual', 'courseid'=>$idcourse, 'status'=>ENROL_INSTANCE_ENABLED), 'sortorder,id ASC')) {
+                return false;
+            }
+            $instance = reset($instances);
+            if(!$ue = $DB->get_record('user_enrolments', array('enrolid'=>$instance->id, 'userid'=>$user->id))){
+                           
+                $this->enrol_try_internal_enrol($idcourse, $user->id, $roleid = 0, $timestart = 0, $timeend = 0);
+              
+            }else{
+                $record_to_insert_ue = new stdClass();
+                $record_to_insert_ue->id = $ue->id; 
+                $record_to_insert_ue->enrolid = $ue->enrolid;
+                $record_to_insert_ue->isenrol = 1;
+                $record_to_insert_ue->userid = $ue->userid;
+                $record_to_insert_ue->status = 1;
+                print_r($record_to_insert_ue);
+               
+                try {
+                    $DB->update_record('user_enrolments', $record_to_insert_ue, false);
+                    
+                  } catch (dml_exception $e) {
+                    return false;
+                }
+            }
+             //enrol_try_internal_enrol($courseid, $userid, $roleid = null, $timestart = 0, $timeend = 0)
+      }
     }
+    public function deletecourse(int $idcourse, int $idmastercourse)
+    {
+        global $DB;
+        // $course = $this->get_course($idcourse);
+      
+        $record_to_insert = new stdClass();
+        $record_to_insert->id_course = $idcourse;       
+        $record_to_insert->id_mastercourse = $idmastercourse;
+        
+        if (!$ue = $DB->get_record('coursemaster_course', array('id_mastercourse'=>$idmastercourse, 'id_course'=>$idcourse))) {
+            // weird, user not enrolled
+            return false;
+        }
+        
+        try {
+            // return $DB->update_record('course', $record_to_insert);
+            // $DB->delete_record('coursemaster_course', $record_to_insert, false);
+            $DB->delete_records('coursemaster_course', array('id'=>$ue->id));
 
+          } catch (dml_exception $e) {
+            return false;
+        }
+        
+        //add user enrol to new course
+        //check user is enrol course
+        //get user who enrol this course
+        $users = $DB->get_records_sql(' SELECT DISTINCT  `mdl_user`.id,`mdl_user`.`username`, `mdl_user`.email
+                                 FROM `mdl_user_enrol_mastercourse` 
+                                 INNER JOIN `mdl_user` 
+                                 ON `mdl_user`.`id` =`mdl_user_enrol_mastercourse`.`id_user`  
+                                 WHERE `mdl_user_enrol_mastercourse`.`id_mastercourse` =' . $idmastercourse);
+        
+        foreach ($users as $user) {
+            if (!$instances = $DB->get_records('enrol', array('enrol'=>'manual', 'courseid'=>$idcourse, 'status'=>ENROL_INSTANCE_ENABLED), 'sortorder,id ASC')) {
+                return false;
+            }
+            $instance = reset($instances);
+            if(!$ue = $DB->get_record('user_enrolments', array('isenrol'=>1))){
+                $this->unenrol_try_internal_unenrol($idcourse, $user->id, $roleid = 0, $timestart = 0, $timeend = 0);
+            }
+             //enrol_try_internal_enrol($courseid, $userid, $roleid = null, $timestart = 0, $timeend = 0)
+        }
+    }
     public function get_course(int $idcourse)
     {
         global $DB;
@@ -250,30 +336,7 @@ class manager {
             }
         }
     }
-    // function enrol_get_instances($courseid, $enabled) {
-    //     global $DB, $CFG;
     
-    //     if (!$enabled) {
-    //         return $DB->get_records('enrol', array('courseid'=>$courseid), 'sortorder,id');
-    //     }
-    
-    //     $result = $DB->get_records('enrol', array('courseid'=>$courseid, 'status'=>ENROL_INSTANCE_ENABLED), 'sortorder,id');
-    
-    //     $enabled = explode(',', $CFG->enrol_plugins_enabled);
-    //     foreach ($result as $key=>$instance) {
-    //         if (!in_array($instance->enrol, $enabled)) {
-    //             unset($result[$key]);
-    //             continue;
-    //         }
-    //         if (!file_exists("$CFG->dirroot/enrol/$instance->enrol/lib.php")) {
-    //             // broken plugin
-    //             unset($result[$key]);
-    //             continue;
-    //         }
-    //     }
-    
-    //     return $result;
-    // }
     function enrol_get_instances($courseid, $enabled) {
         global $DB, $CFG;
     
@@ -303,4 +366,7 @@ class manager {
         $words = explode('_', get_class($this));
         return $words[1];
     }
+
+    
+
 }

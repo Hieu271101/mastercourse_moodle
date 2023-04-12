@@ -8,10 +8,10 @@
     $context = context_system::instance();
     require_capability('local/message:managemessages', $context);
 
-    $PAGE->set_url(new moodle_url('/local/message/addcourses.php'));
+    $PAGE->set_url(new moodle_url('/local/message/deletecourses.php'));
     $PAGE->set_context(\context_system::instance());
-    $PAGE->set_title('Add course');
-    $PAGE->set_heading('Add Course');
+    $PAGE->set_title('Delete course');
+    $PAGE->set_heading('Delete Course');
     $PAGE->requires->js_call_amd('local_message/confirm');
     $PAGE->requires->css('/local/message/styles.css');
     $PAGE->add_body_class('limitedwidth');
@@ -28,7 +28,7 @@
 
     } else if ($fromform = $mform->get_data()) {
     $manager = new manager();
-    $manager->addcourse($fromform->idcourse, $fromform->id);
+    $manager->deletecourse($fromform->idcourse, $fromform->id);
 
     // Go back to manage.php page
     redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('created_form', 'local_message') . $fromform->messagetext);

@@ -1,14 +1,14 @@
 
-
+<h4>Course list</h4>
 <div class="card-deck dashboard-card-deck one-row" data-region="items-list" role="list">
-    #items
+  
     {{#courses}}
 
     <div class="card dashboard-card" role="listitem"
     data-region="course-content"
     data-course-id="{id}">
-    <a href="{{viewurl}}?mastercourseid={{id}}" tabindex="-1">
-        <div class="card-img dashboard-card-img" style='background-image: url("{courseimage}");'>
+    <a href="{{courselink}}?id={{id}}" tabindex="-1">
+        <div class="card-img dashboard-card-img" style='background-image: url("{{courseimage}}");'>
             <span class="sr-only">#straria:courseimage, core_course/str</span>
         </div>
     </a>
@@ -17,41 +17,28 @@
             <div class="w-100 text-truncate">
                 {{name}}
                 {{fullname}}
-                #showshortname
+               
                     <div class="text-muted muted d-flex mb-1 flex-wrap">
                         <span class="sr-only">
                             #straria:courseshortname, core_course/str
                         </span>
                         <div>
-                            {shortname}
+                {{shortname}}
                         </div>
-                        $divider/divider
+                        
                     </div>
-                /showshortname
-                
-                <a href="{{viewurl}}" class="aalink coursename mr-2 mb-1">
-                    > core_course/favouriteicon 
-                    <span class="sr-only">
-                            #straria:coursename, core_course/str
-                        </span>
-                    $coursename/coursename
-                </a>
-                <div class="text-muted muted d-flex flex-wrap">
-                    $coursecategory/coursecategory
-                </div>
                 
             </div>
         </div>
+        
     </div>
-    <div class="d-flex align-items-start">
-        $progress/progress
-        $menu/menu
-    </div>
+    <a class="btn btn-primary" href="{{deletecourse}}?id">Delete Course</a>
 </div> 
 
 
+
 {{/courses}}
-    /items
+    
 
 
     

@@ -83,6 +83,6 @@
         'mastercourse' => array_values((array)$items),
         'viewurl' => new moodle_url('/local/mastercourse/enrolmastercourse.php'),
     ];
-    echo $OUTPUT->render_from_template('local_mastercourse/listuser', $templatecontext);
+    // echo $OUTPUT->render_from_template('local_mastercourse/listuser', $templatecontext);
 
     echo $OUTPUT->footer();

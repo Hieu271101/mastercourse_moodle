@@ -51,7 +51,7 @@
         
     } 
     else {
-        redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('cancelled_form', 'local_message'));
+        redirect($CFG->wwwroot . '/local/mastercourse/managemastercourse.php', get_string('cancelled_form', 'local_message'));
     }
 
     echo $OUTPUT->header();

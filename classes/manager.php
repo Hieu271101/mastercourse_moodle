@@ -228,6 +228,7 @@ class manager {
             }
              //enrol_try_internal_enrol($courseid, $userid, $roleid = null, $timestart = 0, $timeend = 0)
         }
+        return true;
     }
     public function get_course(int $idcourse)
     {

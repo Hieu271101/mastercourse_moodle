@@ -32,7 +32,7 @@
         </div>
         
     </div>
-    <a class="btn btn-primary" href="{{deletecourse}}?id">Delete Course</a>
+    <a class="btn btn-primary" onclick="return confirm('Are you sure you want to delete this item?');"  href="{{deletecourse}}?mastercourseid={{mastercourseId}}&courseid={{id}} ">Delete Course</a>
 </div> 
 
 
@@ -46,3 +46,7 @@
     
 
 </div>
+
+<script>
+        console.log(document.getElementsByClassName('btn btn-primary'));
+</script>

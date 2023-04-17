@@ -114,9 +114,9 @@
         'users' => array_values((array)$users),
         'mastercourse' => array_values((array)$mastercourse),
         'courses' => array_values((array)$course),
-        
+        'mastercourseId' => $messageid,
         'addcourse' => new moodle_url('/local/mastercourse/addcourse.php'),
-        'deletecourse'  => new moodle_url('/local/mastercourse/deletecourse.php'),
+        'deletecourse'  => new moodle_url('/local/mastercourse/deletecourses.php'),
         'createmastercoursecourse' => new moodle_url('/local/mastercourse/createmastercourse.php'),
         'enrolmastercourse' => new moodle_url('/local/mastercourse/enrolmastercourses.php'),
         'unenrolmastercourse' => new moodle_url('/local/mastercourse/unenrolmastercourse.php'),

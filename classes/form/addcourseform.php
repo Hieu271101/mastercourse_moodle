@@ -9,12 +9,16 @@ class addcourseform extends moodleform {
     //Add elements to form
     public function definition() {
         global $CFG;
-        $mform = $this->_form; // Don't forget the underscore!
+        $choices = array();
+        $choices = $this->getAllCourse();
 
+        $mform = $this->_form; // Don't forget the underscore!
+        $mform->addElement('select', 'idcourse', 'Select Course: ', $choices);
+        $mform->setDefault('idcourse', '2');
         $mform->addElement('hidden', 'id', 'Enter id master course: '); // Add elements to your form
         $mform->setType('id', PARAM_NOTAGS);  
-        $mform->addElement('text', 'idcourse', 'Enter course name: '); // Add elements to your form
-        $mform->setType('idcourse', PARAM_NOTAGS);                   //Set type of element
+        // $mform->addElement('text', 'idcourse', 'Enter course name: '); // Add elements to your form
+        // $mform->setType('idcourse', PARAM_NOTAGS);                   //Set type of element
         // $mform->setDefault('coursename', 'Please enter course name');        //Default value
         
         $this->add_action_buttons();
@@ -23,6 +27,16 @@ class addcourseform extends moodleform {
     function validation($data, $files) {
         return array();
     }
-    
+    function getAllCourse(): array {
+        $courses = get_courses();
+        $choices = array();
+        foreach ($courses as $course) {  
+            if($course->id!=1) {
+                $choices[$course->id] = $course->fullname;
+            }       
+           
+        }
+        return $choices;
+    }
     
 }

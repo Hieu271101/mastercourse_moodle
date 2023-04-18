@@ -95,7 +95,7 @@
                                           role="button" class="editenrollink" rel="86" data-action="editenrolment"
                                           title="Edit enrolment"><i class="icon fa fa-cog fa-fw " title="Edit enrolment"
                                                  role="img" aria-label="Edit enrolment"></i></a>
-                                   <a href="#"
+                                   <a onclick="return confirm('Are you sure you want to unenrol this user?');"  href="{{unenrolmastercourse}}?mastercourseid={{mastercourseId}}&userid={{id}} "
                                           role="button" class="unenrollink" rel="86" data-action="unenrol"
                                           title="Unenrol"><i class="icon fa fa-trash fa-fw " title="Unenrol" role="img"
                                                  aria-label="Unenrol"></i></a>

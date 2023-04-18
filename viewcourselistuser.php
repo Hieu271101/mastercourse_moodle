@@ -10,6 +10,7 @@
     $PAGE->set_context(\context_system::instance());
     $PAGE->set_title('Manage Master Course');
     $PAGE->set_heading('Manage Master Course');
+    $PAGE->add_body_class('limitedwidth');
     // $PAGE->requires->js_call_amd('local_message/confirm');
     // $PAGE->requires->css('/local/message/styles.css');
     // $PAGE->add_body_class('limitedwidth');
@@ -77,14 +78,7 @@
                                 --  INNER JOIN `mdl_role` 
                                 --  ON `mdl_role`.`id` = `mdl_user_enrol_mastercourse`.`role_id`  
                                  WHERE `mdl_user_enrol_mastercourse`.`id_mastercourse`= '.$messageid);
-//   SELECT u.id ,u.firstname, u.lastname, u.email , r.shortname as rolename 
-        
-//   FROM `mdl_user_enrol_mastercourse` as uem
-//   INNER JOIN `mdl_user` as u
-//   ON `u`.`id` = `uem`.`id_user`  
-//   INNER JOIN `mdl_role` as r
-//   ON `r`.`id` = `uem`.`role_id`  
-//   WHERE `uem`.`id_mastercourse`= 2
+
 
     $templatecontext = (object)[
         // 'id' => array_values((array)$messageid),
@@ -100,14 +94,10 @@
         'courselink' => new moodle_url('/course/view.php'),
     ];
     
-    echo $OUTPUT->render_from_template('local_mastercourse/manage', $templatecontext);
-    echo "<h4>Add Course</h4>";
-    $addform->display();
-    echo $OUTPUT->render_from_template('local_mastercourse/listcourse', $templatecontext);
-    
-    echo $OUTPUT->render_from_template('local_mastercourse/listuser', $templatecontext);
-
-    
+ 
+   
+    echo $OUTPUT->render_from_template('local_mastercourse/viewcourselistuser', $templatecontext);
+        
     echo $OUTPUT->footer();
 
 ?>

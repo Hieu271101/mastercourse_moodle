@@ -77,7 +77,7 @@ class manager {
                 
                 $instance = reset($instances);
                 if(!$ue = $DB->get_record('user_enrolments', array('enrolid'=>$instance->id, 'userid'=>$iduser))){
-                               
+                 
                     $this->enrol_try_internal_enrol($value->id, $iduser, $roleid = 0, $timestart = 0, $timeend = 0);
                   
                 }else{
@@ -100,10 +100,15 @@ class manager {
             //   $this->enrol_try_internal_enrol($value->id, $iduser, $roleid, $timestart = 0, $timeend = 0); //enrol_try_internal_enrol($courseid, $userid, $roleid = null, $timestart = 0, $timeend = 0)
         }
         try {
-            return $DB->insert_record('user_enrol_mastercourse', $record_to_insert, false);
+            // if(!$DB->get_record('user_enrol_mastercourse', array('id_mastercourse'=>$record_to_insert->id_mastercourse,
+            //                                                     'id_user'=>$record_to_insert->id_user,
+            //                                                     'role_id'=>$record_to_insert->role_id)))
+                return $DB->insert_record('user_enrol_mastercourse', $record_to_insert, false);
+             
            } catch (dml_exception $e) {
              return false;
         }
+        return true;
           
     }
 
@@ -280,7 +285,7 @@ class manager {
             }
             // $this->unenrol_try_internal_unenrol($value->id, $iduser);
         }
-
+        return true;
     }
 
     function unenrol_try_internal_unenrol($courseid, $userid) {

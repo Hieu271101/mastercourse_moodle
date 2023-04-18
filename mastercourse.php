@@ -4,16 +4,13 @@
     global $DB;
     
     require_login();
-    require_admin();
     $context = context_system::instance();
-    require_capability('local/message:managemessages', $context);
+    // require_capability('local/message:managemessages', $context);
 
-    $PAGE->set_url(new moodle_url('/local/mastercourse/enrolmastercourses.php'));
+    $PAGE->set_url(new moodle_url('/my/mastercourse.php'));
     $PAGE->set_context(\context_system::instance());
-    $PAGE->set_title('Enrol master course');
-    $PAGE->set_heading('Enrol Master Course');
-    $PAGE->requires->js_call_amd('local_message/confirm');
-    $PAGE->requires->css('/local/message/styles.css');
+    $PAGE->set_title('Master Course');
+    $PAGE->set_heading('Master Course');
     $PAGE->add_body_class('limitedwidth');
     require_once($CFG->dirroot.'/local/mastercourse/classes/manager.php');
     require_once($CFG->dirroot.'/local/mastercourse/classes/form/edit.php');

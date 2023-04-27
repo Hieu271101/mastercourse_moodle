@@ -5,9 +5,9 @@
     
     require_login();
     $context = context_system::instance();
-    // require_capability('local/message:managemessages', $context);
 
-    $PAGE->set_url(new moodle_url('/my/mastercourse.php'));
+
+    $PAGE->set_url(new moodle_url('/local/mastercourse/mastercourse.php'));
     $PAGE->set_context(\context_system::instance());
     $PAGE->set_title('Master Course');
     $PAGE->set_heading('Master Course');

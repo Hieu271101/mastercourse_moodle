@@ -4,15 +4,13 @@
     require_login();
     require_admin();
     $context = context_system::instance();
-    require_capability('local/message:managemessages', $context);
+
 
     $PAGE->set_url(new moodle_url('/local/mastercourse/managemastercourse.php'));
     $PAGE->set_context(\context_system::instance());
     $PAGE->set_title('Manage Master Course');
     $PAGE->set_heading('Manage Master Course');
-    // $PAGE->requires->js_call_amd('local_message/confirm');
-    // $PAGE->requires->css('/local/message/styles.css');
-    // $PAGE->add_body_class('limitedwidth');
+
     
     require_once($CFG->dirroot.'/local/mastercourse/classes/manager.php');
     require_once($CFG->dirroot.'/local/mastercourse/classes/form/edit.php');

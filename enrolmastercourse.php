@@ -4,14 +4,13 @@
     require_login();
     require_admin();
     $context = context_system::instance();
-    require_capability('local/message:managemessages', $context);
+
 
     $PAGE->set_url(new moodle_url('/local/mastercourse/enrolmastercourse.php'));
     $PAGE->set_context(\context_system::instance());
     $PAGE->set_title('Enrol master course');
     $PAGE->set_heading('Enrol Master Course');
-    // $PAGE->requires->js_call_amd('local_message/confirm');
-    // $PAGE->requires->css('/local/message/styles.css');
+
     $PAGE->add_body_class('limitedwidth');
     
     require_once($CFG->dirroot.'/local/mastercourse/classes/manager.php');

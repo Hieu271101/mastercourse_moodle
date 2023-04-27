@@ -2,18 +2,15 @@
     require_once(__DIR__ . '/../../config.php');
     global $DB;    
     require_login();
-    require_admin();
     $context = context_system::instance();
-    require_capability('local/message:managemessages', $context);
+   
 
-    $PAGE->set_url(new moodle_url('/local/mastercourse/managemastercourse.php'));
+    $PAGE->set_url(new moodle_url('/local/mastercourse/viewcourselistuser.php'));
     $PAGE->set_context(\context_system::instance());
-    $PAGE->set_title('Manage Master Course');
-    $PAGE->set_heading('Manage Master Course');
+    $PAGE->set_title('List course In Your Master course');
+    $PAGE->set_heading('Course list');
     $PAGE->add_body_class('limitedwidth');
-    // $PAGE->requires->js_call_amd('local_message/confirm');
-    // $PAGE->requires->css('/local/message/styles.css');
-    // $PAGE->add_body_class('limitedwidth');
+
     
     require_once($CFG->dirroot.'/local/mastercourse/classes/manager.php');
     require_once($CFG->dirroot.'/local/mastercourse/classes/form/edit.php');
@@ -45,15 +42,13 @@
         $classTemp = new stdClass();
         $classTemp->id = $messageid;
         $message = $classTemp;
-        // $message = $manager->get_course($messageid);
-        // $fform->idmastercourse = $messageid;
+
         $addform->set_data($message);
-        // $edit = new edit();
-        // $message = $manager->idmastercourse($messageid);
+
         if (!$message) {
             throw new invalid_parameter_exception('Message not found');
         }
-        // $mform->set_data($message);
+
         
     } 
     else {

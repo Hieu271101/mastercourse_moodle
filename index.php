@@ -1,22 +1,5 @@
 <?php
 
-
-// require_once(__DIR__ . '/../../config.php');
-
-// global $DB;
-
-// require_login();
-
-// $context = context_system::instance();
-// // require_capability('local/message:managemessages', $context);
-
-// $PAGE->set_url(new moodle_url('/local/mastercourse/manage.php'));
-// $PAGE->set_context(\context_system::instance());
-// $PAGE->set_title(get_string('title_mastercourse', 'local_mastercourse'));
-// $PAGE->set_heading(get_string('title_heading', 'local_mastercourse'));
-// $PAGE->requires->js_call_amd('local_message/confirm');
-
-
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->dirroot. '/course/lib.php');
 

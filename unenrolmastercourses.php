@@ -7,9 +7,8 @@
      require_login();
      require_admin();
      $context = context_system::instance();
-     require_capability('local/message:managemessages', $context);
- 
-     $PAGE->set_url(new moodle_url('/local/message/unenrolmastercourses.php'));
+    
+     $PAGE->set_url(new moodle_url('/local/mastercourse/unenrolmastercourses.php'));
    
      require_once($CFG->dirroot.'/local/mastercourse/classes/manager.php');
      

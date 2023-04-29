@@ -46,48 +46,83 @@ class manager {
                                                                             INNER JOIN `mdl_course` 
                                                                             ON `mdl_course`.`id` = `mdl_coursemaster_course`.`id_course`  
                                                                             WHERE `mdl_coursemaster_course`.`id_mastercourse`= '.$idmastercourse);
-                
+               
                 foreach ($courseshasmastercourseid as $value) {
+                    
                         // get enrol of course
-                        $instances = $DB->get_records('enrol', array('enrol'=>'manual', 'courseid'=>$value->id, 'status'=>ENROL_INSTANCE_ENABLED), 'sortorder,id ASC');         
+                        $instances = $DB->get_records('enrol', array('enrol'=>'manual', 'courseid'=>$value->id));         
                         $instance = reset($instances);
                         // check user enrol if not enrol will enrol user to both master course enrol and course enrol
-                        if(!$ue = $DB->get_record('user_enrolments', array('enrolid'=>$instance->id, 'userid'=>$iduser))){
-                            // set is_master_course_enrol
+                        if(!$ue = $DB->get_records('user_enrolments', array('enrolid'=>$instance->id, 'userid'=>$iduser))){
+                           
                             try {
                                     $record_to_insert->id_course = $value->id;
-                                    $DB->insert_record('user_enrol_mastercourse', $record_to_insert, false);
+                                    $record_to_insert->is_normal_enrol = 0;
+                                    if(!$ue = $DB->get_records('user_enrol_mastercourse', array('id_user'=>$iduser, 
+                                                                                        'id_mastercourse'=>$idmastercourse,
+                                                                                        'id_course'=>$value->id,
+                                                                                        'is_normal_enrol'=>0))){
+                                                                                            
+                                        $DB->insert_record('user_enrol_mastercourse', $record_to_insert, false);
+                                        }
                                 
                             } catch (dml_exception $e) {
-                                // return false;
-                                continue;
+                                return false;
+                                // continue;
                             }
 
                             $this->enrol_try_internal_enrol($value->id, $iduser, $roleid = 0, $timestart = 0, $timeend = 0);
-                        
+                
                         }else{
-
+                          
                             //execute logic check user in normal course or master course
                             //check exists any mastercoure has course
-                            if(!$DB->get_record('coursemaster_course', array('id_mastercourse'=>$idmastercourse, 'id_course'=>$value->id))){
+                            $isUserEnrolAnyMsBefore = $DB->get_record('user_enrol_mastercourse', array('id_user'=>$iduser, 
+                                                                                                    'id_course'=>$value->id));
+                           
+                            if(!$isUserEnrolAnyMsBefore){
+                                
                                 $record_to_insert->id_course = $value->id;
                                 $record_to_insert->is_normal_enrol = 1;
+                                if(!$ue = $DB->get_records('user_enrol_mastercourse', array('id_user'=>$iduser, 
+                                                                                        'id_mastercourse'=>$idmastercourse,
+                                                                                        'id_course'=>$value->id,
+                                                                                        'is_normal_enrol'=>1))){
                                 $DB->insert_record('user_enrol_mastercourse', $record_to_insert, false);
+                                                                                        }
+                            }else if($DB->get_records('user_enrol_mastercourse', array('id'=>$isUserEnrolAnyMsBefore->id,'is_normal_enrol'=>1))){
+                               
+                                $record_to_insert->id_course = $value->id;
+                                $record_to_insert->is_normal_enrol = 1;
+                                if(!$ue = $DB->get_records('user_enrol_mastercourse', array('id_user'=>$iduser, 
+                                                                                        'id_mastercourse'=>$idmastercourse,
+                                                                                        'id_course'=>$value->id,
+                                                                                        'is_normal_enrol'=>1))){
+                                $DB->insert_record('user_enrol_mastercourse', $record_to_insert, false);
+                                                                                        }
                             }
                             // else course is master course
                             else{
                                 $record_to_insert->id_course = $value->id;
-                                $DB->insert_record('user_enrol_mastercourse', $record_to_insert, false);
+                                $record_to_insert->is_normal_enrol = 0;
+                                if(!$ue = $DB->get_records('user_enrol_mastercourse', array('id_user'=>$iduser, 
+                                                                                        'id_mastercourse'=>$idmastercourse,
+                                                                                        'id_course'=>$value->id,
+                                                                                        'is_normal_enrol'=>0))){
+                                                                                            
+                            
+                                        $DB->insert_record('user_enrol_mastercourse', $record_to_insert, false);
+                                        }
                             }
 
                         }
                     
-                    //   $this->enrol_try_internal_enrol($value->id, $iduser, $roleid, $timestart = 0, $timeend = 0); //enrol_try_internal_enrol($courseid, $userid, $roleid = null, $timestart = 0, $timeend = 0)
                 }
 
         }else{
             return false;
         }
+     
         return true;
           
     }
@@ -149,6 +184,7 @@ class manager {
                 return false;
             }
             $instance = reset($instances);
+            
             if(!$ue = $DB->get_record('user_enrolments', array('enrolid'=>$instance->id, 'userid'=>$user->id))){
                 
                 global $DB;
@@ -158,9 +194,17 @@ class manager {
                 $record_to_insert->id_user = $user->id;
                 $record_to_insert->id_mastercourse = $idmastercourse;
                 $record_to_insert->id_course = $idcourse;
-                $DB->insert_record('user_enrol_mastercourse', $record_to_insert, false);
+                $record_to_insert->is_normal_enrol = 0;
+                if(!$ue = $DB->get_records('user_enrol_mastercourse', array('id_user'=>$user->id, 
+                                                                            'id_mastercourse'=>$idmastercourse,
+                                                                            'id_course'=>$idcourse,
+                                                                            ))){
+                                                                                            
+                                   
+                                        $DB->insert_record('user_enrol_mastercourse', $record_to_insert, false);
+                                    }
 
-                $this->enrol_try_internal_enrol($idcourse, $user->id, $roleid = 0, $timestart = 0, $timeend = 0);
+                $this->enrol_try_internal_enrol($idcourse, $user->id, $roleid = 5, $timestart = 0, $timeend = 0);
               
             }else{
                 if(!$DB->get_record('user_enrol_mastercourse', array('id_course'=>$idcourse, 'id_user'=>$user->id))){
@@ -172,7 +216,15 @@ class manager {
                     $record_to_insert->id_mastercourse = $idmastercourse;
                     $record_to_insert->id_course = $idcourse;
                     $record_to_insert->is_normal_enrol = 1;
-                    $DB->insert_record('user_enrol_mastercourse', $record_to_insert, false);
+                     if(!$ue = $DB->get_records('user_enrol_mastercourse', array('id_user'=>$user->id, 
+                                                                                        'id_mastercourse'=>$idmastercourse,
+                                                                                        'id_course'=>$idcourse,
+                                                                                        ))){
+                                                                                            
+                                   
+                                      
+                                        $DB->insert_record('user_enrol_mastercourse', $record_to_insert, false);
+                                    }
                 }
                 else{
                     global $DB;
@@ -182,8 +234,16 @@ class manager {
                     $record_to_insert->id_user = $user->id;
                     $record_to_insert->id_mastercourse = $idmastercourse;
                     $record_to_insert->id_course = $idcourse;
-                   
-                    $DB->insert_record('user_enrol_mastercourse', $record_to_insert, false);
+                    $record_to_insert->is_normal_enrol = 0;
+                     if(!$ue = $DB->get_records('user_enrol_mastercourse', array('id_user'=>$user->id, 
+                                                                                        'id_mastercourse'=>$idmastercourse,
+                                                                                        'id_course'=>$idcourse,
+                                                                                        ))){
+                                                                                            
+                                   
+                                     
+                                        $DB->insert_record('user_enrol_mastercourse', $record_to_insert, false);
+                                    }
                 }
                
             }
@@ -213,23 +273,25 @@ class manager {
             return false;
         }
         
-        $users = $DB->get_records_sql(' SELECT DISTINCT  `mdl_user`.id,`mdl_user`.`username`, `mdl_user`.email
+        if($coursesInMastercourse = $DB->get_records('user_enrol_mastercourse', array('id_mastercourse'=>$idmastercourse,
+                                                                                     'id_course'=>$idcourse, 
+                                                                                    'is_normal_enrol'=>0))
+                                                                                    ){
+         
+           
+           foreach($coursesInMastercourse as $courseInMastercourse){
+
+               $DB->delete_records('user_enrol_mastercourse', array('id'=>$courseInMastercourse->id));
+           }
+                
+                                               
+            $users = $DB->get_records_sql(' SELECT DISTINCT  `mdl_user`.id,`mdl_user`.`username`, `mdl_user`.email
                                  FROM `mdl_user_enrol_mastercourse` 
                                  INNER JOIN `mdl_user` 
                                  ON `mdl_user`.`id` =`mdl_user_enrol_mastercourse`.`id_user`  
-                                 WHERE `mdl_user_enrol_mastercourse`.`id_mastercourse` =' . $idmastercourse);
-        
-        foreach ($users as $user) {          
-            if($DB->get_record('user_enrol_mastercourse', array('id_mastercourse'=>$idmastercourse,
-                                                                                    'id_course'=>$idcourse, 
-                                                                                    'id_user'=>$user->id,
-                                                                                    'is_normal_enrol'=>0))){
-                    if(!$DB->get_record('user_enrol_mastercourse', array(
-                                                                        'id_course'=>$idcourse, 
-                                                                        'id_user'=>$user->id,
-                                                                        ))){
-
-                        if (!$instances = $DB->get_records('enrol', array('enrol'=>'manual', 
+                                 WHERE `mdl_user_enrol_mastercourse`.`id_mastercourse` =' . $idmastercourse);   
+            foreach ($users as $user) {  
+                 if (!$instances = $DB->get_records('enrol', array('enrol'=>'manual', 
                                                                                             'courseid'=>$idcourse, 
                                                                                             'status'=>ENROL_INSTANCE_ENABLED), 
                                                                                             'sortorder,id ASC')) {
@@ -237,19 +299,28 @@ class manager {
                         }
                             $instance = reset($instances);
                                     // $ue = $DB->get_record('user_enrolments', array('enrolid'=>$instance->id, 'userid'=>$user->id))
-                            if(!$uee = $DB->get_record('user_enrolments', array('enrolid'=>$instance->id, 
-                                                                                                    'userid'=>$user->id,
-                                                                                                    'isenrol'=>1))){
-                                        $this->unenrol_try_internal_unenrol($idcourse, $user->id);
+                            if($uee = $DB->get_record('user_enrolments', array('enrolid'=>$instance->id, 
+                                                                                'userid'=>$user->id,
+                                                                                                 ))){
+                                if($coursesInMastercourse = $DB->get_records('user_enrol_mastercourse', array(
+                                                                                    'id_user'=>$user->id,
+                                                                                     'id_course'=>$idcourse, 
+                                                                                    ))){
+                                                                                        
+                                              $this->unenrol_try_internal_unenrol($idcourse, $user->id);
+                                                                                    }                                                         
                             }                                                             
-                    }
-           
-
-            }
-
-            
-             //enrol_try_internal_enrol($courseid, $userid, $roleid = null, $timestart = 0, $timeend = 0)
+            }                                                 
         }
+        else if($coursesInMastercourse = $DB->get_records('user_enrol_mastercourse', array('id_mastercourse'=>$idmastercourse,
+                                                            'id_course'=>$idcourse, 
+                                                            'is_normal_enrol'=>1))){
+                    foreach($coursesInMastercourse as $courseInMastercourse){
+                                                
+                     $DB->delete_records('user_enrol_mastercourse', array('id'=>$courseInMastercourse->id)); 
+                    }
+        }
+
         return true;
     }
     public function get_course(int $idcourse)
@@ -282,15 +353,6 @@ class manager {
             return;
         }
         // check course is normal course or master course 
-
-        // if($DB->get_record('user_enrol_mastercourse', array('id_mastercourse'=>$idmastercourse, 'id_user'=>$iduser,'is_normal_enrol'=>1))){
-        //     $DB->delete_records('user_enrol_mastercourse', array('id'=>$ue->id));
-        // }else{
-        //     $DB->delete_records('user_enrol_mastercourse', array('id'=>$ue->id));
-        // }
-
-
-        // $DB->delete_records('user_enrol_mastercourse', array('id'=>$ue->id));
 
         $courseshasmastercourseid =  (array)$DB->get_records_sql('SELECT `mdl_course`.`id`, `mdl_course`.`fullname`
                                                                     FROM `mdl_coursemaster_course` 

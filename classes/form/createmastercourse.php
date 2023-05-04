@@ -10,11 +10,15 @@ class createmastercourse extends moodleform {
     public function definition() {
         global $CFG;
         $mform = $this->_form; // Don't forget the underscore!
+        $mform->addElement('hidden','id','id: ');
 
-        $mform->addElement('text', 'namemastercourse', 'Enter name of mastercourse: '); // Add elements to your form
-        $mform->setType('namemastercourse', PARAM_NOTAGS);                   //Set type of element
-        $mform->setDefault('namemastercourse', 'Enter name of mastercourse');        //Default value
+        $mform->addElement('text', 'name', 'Enter name of mastercourse: '); // Add elements to your form
+        $mform->setType('name', PARAM_NOTAGS);                   //Set type of element
+        $mform->setDefault('name', 'Enter name of mastercourse');        //Default value
 
+        $mform->addElement('textarea','description', 'Enter description: ');
+        $mform->setType('description', PARAM_NOTAGS);
+      
         $this->add_action_buttons();
     }
     //Custom validation should be added here

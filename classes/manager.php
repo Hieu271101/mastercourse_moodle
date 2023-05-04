@@ -7,17 +7,29 @@ use stdClass;
 
 class manager {
     
-    public function createmastercourse(string $name): bool
+    public function createmastercourse(string $id, string $name, string $description): bool
     {
          global $DB;
           $record_to_insert = new stdClass();
+          $record_to_insert->id= $id;
           $record_to_insert->name = $name;
-          try {
-             return $DB->insert_record('course_master', $record_to_insert, false);
-            } catch (dml_exception $e) {
-              return false;
+          $record_to_insert->description = $description;
+          if(isset($id)){
+            try {
+                return $DB->insert_record('course_master', $record_to_insert, false);
+               } catch (dml_exception $e) {
+                 return false;
+             }
+          }else{
+            try {
+                return $DB->update_record('course_master', $record_to_insert, false);
+               } catch (dml_exception $e) {
+                 return false;
+             }
           }
+          
     }
+
 
     public function enrol_mastercourse_byemail(string $idmastercourse, string $roleid,  $email): bool
     {   
@@ -328,6 +340,11 @@ class manager {
     {
         global $DB;
         return $DB->get_record('course', ['id' => $idcourse]);
+    }
+    public function get_mastercourse(int $idcourse)
+    {
+        global $DB;
+        return $DB->get_record('course_master', ['id' => $idcourse]);
     }
 
     public function update_course(array $messageids, $idmastercourse): bool

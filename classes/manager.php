@@ -279,10 +279,7 @@ class manager {
                                                                                     ){
          
            
-           foreach($coursesInMastercourse as $courseInMastercourse){
-
-               $DB->delete_records('user_enrol_mastercourse', array('id'=>$courseInMastercourse->id));
-           }
+         
                 
                                                
             $users = $DB->get_records_sql(' SELECT DISTINCT  `mdl_user`.id,`mdl_user`.`username`, `mdl_user`.email
@@ -310,7 +307,11 @@ class manager {
                                               $this->unenrol_try_internal_unenrol($idcourse, $user->id);
                                                                                     }                                                         
                             }                                                             
-            }                                                 
+            }         
+            foreach($coursesInMastercourse as $courseInMastercourse){
+
+                $DB->delete_records('user_enrol_mastercourse', array('id'=>$courseInMastercourse->id));
+            }                                        
         }
         else if($coursesInMastercourse = $DB->get_records('user_enrol_mastercourse', array('id_mastercourse'=>$idmastercourse,
                                                             'id_course'=>$idcourse, 

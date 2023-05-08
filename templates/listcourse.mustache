@@ -2,8 +2,8 @@
 <h4>Course list</h4>
 <div class="card-deck dashboard-card-deck one-row" data-region="items-list" role="list">
   
-    {{#courses}}
-
+  
+  {{#courses}}
     <div class="card dashboard-card" role="listitem"
     data-region="course-content"
     data-course-id="{id}">
@@ -40,13 +40,187 @@
 {{/courses}}
     
 
-
-    
-
-    
-
 </div>
+        
+<form action="saveOrder.php" method="POST">
+     
+    <table class="flexible table table-striped table-hover generaltable generalbox" id="">
+        <thead>
+            <tr>
+                    <th class="header c0" scope="col"><input id="select-all-participants"
+                                    name="select-all-participants" type="checkbox" class="m-1" value=""
+                                    data-action="toggle" data-toggle="master" data-togglegroup="participants-table"
+                                    data-toggle-selectall="Select all" data-toggle-deselectall="Deselect all">
+                            <label for="select-all-participants" class="sr-only">Select all</label>
+                            <div class="commands"></div>
+                    </th>
+                    <th class="header c1" scope="col"><a data-sortable="1" data-sortby="firstname" data-sortorder="4"
+                                    role="button"
+                                    href="http://localhost/moodle/user/index.php?id=12&amp;tsort=firstname&amp;tdir=4">Name Mastercourse
+                                    <span class="accesshide ">Sort by First name Ascending</span></a> 
+                            <div class="commands"></div>
+                    </th>
+                    <th class="header c2" scope="col"><a data-sortable="1" data-sortby="email" data-sortorder="4"
+                                    role="button"
+                                    href="http://localhost/moodle/user/index.php?id=12&amp;tsort=email&amp;tdir=4">Description
+                                    <span class="accesshide ">Sort by Email address Ascending</span></a>
+                            <div class="commands"></div>
+                    </th>
+                    <th class="header c3" scope="col">Processing<div class="commands"></div>
+                    </th>
+                    
+                    
+                    <th class="header c6" scope="col">Function<div class="commands"></div>
+                    </th>
+                    <th class="header c6" scope="col">Sort Order<div class="commands"></div>
+    </th>
+            </tr>
+        </thead>
+        {{#courses}}
+        <tbody>
+            <tr class="" id="user-index-participants-12_r0">
+                    <td class="cell c0" id="user-index-participants-12_r0_c0"><input id="user4" name="user4"
+                                    type="checkbox" class="usercheckbox m-1" value="" data-action="toggle"
+                                    data-toggle="slave" data-togglegroup="participants-table">
+                            <label for="user4" class="accesshide">Select 'Emma Davis'</label></td>
+                    <th class="cell c1" id="user-index-participants-12_r0_c1" scope="row"><a
+                                    href="http://localhost/moodle/user/view.php?id=4&amp;course=12"
+                                    class="d-inline-block aabtn">    {{name}}  {{shortname}}
+                                    </a></th>
+                    <td class="cell c2" id="user-index-participants-12_r0_c2">{{summary}}</td>
+                    <td class="cell c3" id="user-index-participants-12_r0_c3">62%</td>
+                
+                    <td class="cell c6" id="user-index-participants-12_r0_c6">
+                            <div data-fullname="Emma Davis" data-coursename="Day la cai thu 6"
+                                    data-enrolinstancename="Manual enrolments" data-status="Active" data-timestart=""
+                                    data-timeend="" data-timeenrolled="Wednesday, 12 April 2023, 11:44 AM">
+                                
+                                   
+                                    <a onclick="return confirm('Are you sure you want to delete this item?');"  href="{{deletecourse}}?mastercourseid={{mastercourseId}}&courseid={{id}} "
+                                        role="button" class="unenrollink" rel="86" data-action="unenrol"
+                                        title="Unenrol"><i class="icon fa fa-trash fa-fw " title="Unenrol" role="img"
+                                                aria-label="Unenrol"></i></a>
+                            </div>
+                    </td>
+                    <td>
+                        <input type="number" hidden="true" min="0" value="{{ccid}}" name="courseInMastercourse[]" class="order-input-{{ccid}}">
+                        <input type="number" min="0" value="{{cmcso}}" name="courseoder[]" class="form-control">
+                    </td>
+            </tr>
+            
+            
+            
+            <tr class="emptyrow" id="user-index-participants-12_r8">
+                    <td class="cell c0" id="user-index-participants-12_r8_c0"></td>
+                    <th class="cell c1" id="user-index-participants-12_r8_c1" scope="row"></th>
+                    <td class="cell c2" id="user-index-participants-12_r8_c2"></td>
+                    <td class="cell c3" id="user-index-participants-12_r8_c3"></td>
+                    <td class="cell c4" id="user-index-participants-12_r8_c4"></td>
+                    <td class="cell c5" id="user-index-participants-12_r8_c5"></td>
+                    <td class="cell c6" id="user-index-participants-12_r8_c6"></td>
+            </tr>
+            <tr class="emptyrow" id="user-index-participants-12_r9">
+                    <td class="cell c0" id="user-index-participants-12_r9_c0"></td>
+                    <th class="cell c1" id="user-index-participants-12_r9_c1" scope="row"></th>
+                    <td class="cell c2" id="user-index-participants-12_r9_c2"></td>
+                    <td class="cell c3" id="user-index-participants-12_r9_c3"></td>
+                    <td class="cell c4" id="user-index-participants-12_r9_c4"></td>
+                    <td class="cell c5" id="user-index-participants-12_r9_c5"></td>
+                    <td class="cell c6" id="user-index-participants-12_r9_c6"></td>
+            </tr>
+            <tr class="emptyrow" id="user-index-participants-12_r10">
+                    <td class="cell c0" id="user-index-participants-12_r10_c0"></td>
+                    <th class="cell c1" id="user-index-participants-12_r10_c1" scope="row"></th>
+                    <td class="cell c2" id="user-index-participants-12_r10_c2"></td>
+                    <td class="cell c3" id="user-index-participants-12_r10_c3"></td>
+                    <td class="cell c4" id="user-index-participants-12_r10_c4"></td>
+                    <td class="cell c5" id="user-index-participants-12_r10_c5"></td>
+                    <td class="cell c6" id="user-index-participants-12_r10_c6"></td>
+            </tr>
+            <tr class="emptyrow" id="user-index-participants-12_r11">
+                    <td class="cell c0" id="user-index-participants-12_r11_c0"></td>
+                    <th class="cell c1" id="user-index-participants-12_r11_c1" scope="row"></th>
+                    <td class="cell c2" id="user-index-participants-12_r11_c2"></td>
+                    <td class="cell c3" id="user-index-participants-12_r11_c3"></td>
+                    <td class="cell c4" id="user-index-participants-12_r11_c4"></td>
+                    <td class="cell c5" id="user-index-participants-12_r11_c5"></td>
+                    <td class="cell c6" id="user-index-participants-12_r11_c6"></td>
+            </tr>
+            <tr class="emptyrow" id="user-index-participants-12_r12">
+                    <td class="cell c0" id="user-index-participants-12_r12_c0"></td>
+                    <th class="cell c1" id="user-index-participants-12_r12_c1" scope="row"></th>
+                    <td class="cell c2" id="user-index-participants-12_r12_c2"></td>
+                    <td class="cell c3" id="user-index-participants-12_r12_c3"></td>
+                    <td class="cell c4" id="user-index-participants-12_r12_c4"></td>
+                    <td class="cell c5" id="user-index-participants-12_r12_c5"></td>
+                    <td class="cell c6" id="user-index-participants-12_r12_c6"></td>
+            </tr>
+            <tr class="emptyrow" id="user-index-participants-12_r13">
+                    <td class="cell c0" id="user-index-participants-12_r13_c0"></td>
+                    <th class="cell c1" id="user-index-participants-12_r13_c1" scope="row"></th>
+                    <td class="cell c2" id="user-index-participants-12_r13_c2"></td>
+                    <td class="cell c3" id="user-index-participants-12_r13_c3"></td>
+                    <td class="cell c4" id="user-index-participants-12_r13_c4"></td>
+                    <td class="cell c5" id="user-index-participants-12_r13_c5"></td>
+                    <td class="cell c6" id="user-index-participants-12_r13_c6"></td>
+            </tr>
+            <tr class="emptyrow" id="user-index-participants-12_r14">
+                    <td class="cell c0" id="user-index-participants-12_r14_c0"></td>
+                    <th class="cell c1" id="user-index-participants-12_r14_c1" scope="row"></th>
+                    <td class="cell c2" id="user-index-participants-12_r14_c2"></td>
+                    <td class="cell c3" id="user-index-participants-12_r14_c3"></td>
+                    <td class="cell c4" id="user-index-participants-12_r14_c4"></td>
+                    <td class="cell c5" id="user-index-participants-12_r14_c5"></td>
+                    <td class="cell c6" id="user-index-participants-12_r14_c6"></td>
+            </tr>
+            <tr class="emptyrow" id="user-index-participants-12_r15">
+                    <td class="cell c0" id="user-index-participants-12_r15_c0"></td>
+                    <th class="cell c1" id="user-index-participants-12_r15_c1" scope="row"></th>
+                    <td class="cell c2" id="user-index-participants-12_r15_c2"></td>
+                    <td class="cell c3" id="user-index-participants-12_r15_c3"></td>
+                    <td class="cell c4" id="user-index-participants-12_r15_c4"></td>
+                    <td class="cell c5" id="user-index-participants-12_r15_c5"></td>
+                    <td class="cell c6" id="user-index-participants-12_r15_c6"></td>
+            </tr>
+            <tr class="emptyrow" id="user-index-participants-12_r16">
+                    <td class="cell c0" id="user-index-participants-12_r16_c0"></td>
+                    <th class="cell c1" id="user-index-participants-12_r16_c1" scope="row"></th>
+                    <td class="cell c2" id="user-index-participants-12_r16_c2"></td>
+                    <td class="cell c3" id="user-index-participants-12_r16_c3"></td>
+                    <td class="cell c4" id="user-index-participants-12_r16_c4"></td>
+                    <td class="cell c5" id="user-index-participants-12_r16_c5"></td>
+                    <td class="cell c6" id="user-index-participants-12_r16_c6"></td>
+            </tr>
+            <tr class="emptyrow" id="user-index-participants-12_r17">
+                    <td class="cell c0" id="user-index-participants-12_r17_c0"></td>
+                    <th class="cell c1" id="user-index-participants-12_r17_c1" scope="row"></th>
+                    <td class="cell c2" id="user-index-participants-12_r17_c2"></td>
+                    <td class="cell c3" id="user-index-participants-12_r17_c3"></td>
+                    <td class="cell c4" id="user-index-participants-12_r17_c4"></td>
+                    <td class="cell c5" id="user-index-participants-12_r17_c5"></td>
+                    <td class="cell c6" id="user-index-participants-12_r17_c6"></td>
+            </tr>
+            <tr class="emptyrow" id="user-index-participants-12_r18">
+                    <td class="cell c0" id="user-index-participants-12_r18_c0"></td>
+                    <th class="cell c1" id="user-index-participants-12_r18_c1" scope="row"></th>
+                    <td class="cell c2" id="user-index-participants-12_r18_c2"></td>
+                    <td class="cell c3" id="user-index-participants-12_r18_c3"></td>
+                    <td class="cell c4" id="user-index-participants-12_r18_c4"></td>
+                    <td class="cell c5" id="user-index-participants-12_r18_c5"></td>
+                    <td class="cell c6" id="user-index-participants-12_r18_c6"></td>
+            </tr>
+            <tr class="emptyrow" id="user-index-participants-12_r19">
+                    <td class="cell c0" id="user-index-participants-12_r19_c0"></td>
+                    <th class="cell c1" id="user-index-participants-12_r19_c1" scope="row"></th>
+                    <td class="cell c2" id="user-index-participants-12_r19_c2"></td>
+                    <td class="cell c3" id="user-index-participants-12_r19_c3"></td>
+                    <td class="cell c4" id="user-index-participants-12_r19_c4"></td>
+                    <td class="cell c5" id="user-index-participants-12_r19_c5"></td>
+                    <td class="cell c6" id="user-index-participants-12_r19_c6"></td>
+            </tr>
+        </tbody>
+        {{/courses}}
+    </table>
+    <input class="btn btn-primary" type="submit" name="submit" value="Save Order">
+</form>
 
-<script>
-        console.log(document.getElementsByClassName('btn btn-primary'));
-</script>

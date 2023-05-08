@@ -63,11 +63,13 @@
     $mastercourse = $DB->get_records('course_master', ['id' => $messageid]);
    
   
-    $course = $DB->get_records_sql('SELECT *
-                                    FROM `mdl_coursemaster_course` 
-                                    INNER JOIN `mdl_course` 
-                                    ON `mdl_course`.`id` = `mdl_coursemaster_course`.`id_course`  
-                                    WHERE `mdl_coursemaster_course`.`id_mastercourse`= '.$messageid);
+    $course = $DB->get_records_sql('SELECT *, 
+                                    `mdl_coursemaster_course`.id as ccid,
+                                    `mdl_coursemaster_course`.`sortorder`as cmcso
+                                                                FROM `mdl_coursemaster_course` 
+                                                                INNER JOIN `mdl_course` 
+                                                                ON `mdl_course`.`id` = `mdl_coursemaster_course`.`id_course`  
+                                                                WHERE `mdl_coursemaster_course`.`id_mastercourse`= '.$messageid.' ORDER BY cmcso' );
     $users = $DB->get_records_sql('SELECT *
                                  FROM `mdl_user_enrol_mastercourse` 
                                  INNER JOIN `mdl_user` 

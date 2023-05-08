@@ -61,11 +61,11 @@
     $mastercourse = $DB->get_records('course_master', ['id' => $messageid]);
    
   
-    $course = $DB->get_records_sql('SELECT *
+    $course = $DB->get_records_sql('SELECT *, `mdl_coursemaster_course`.sortorder as ccso
                                     FROM `mdl_coursemaster_course` 
                                     INNER JOIN `mdl_course` 
                                     ON `mdl_course`.`id` = `mdl_coursemaster_course`.`id_course`  
-                                    WHERE `mdl_coursemaster_course`.`id_mastercourse`= '.$messageid);
+                                    WHERE `mdl_coursemaster_course`.`id_mastercourse`= '.$messageid. '       ORDER BY ccso' );
     $users = $DB->get_records_sql('SELECT *
                                  FROM `mdl_user_enrol_mastercourse` 
                                  INNER JOIN `mdl_user` 
@@ -74,7 +74,7 @@
                                 --  ON `mdl_role`.`id` = `mdl_user_enrol_mastercourse`.`role_id`  
                                  WHERE `mdl_user_enrol_mastercourse`.`id_mastercourse`= '.$messageid);
 
-
+    
     $templatecontext = (object)[
         // 'id' => array_values((array)$messageid),
         'users' => array_values((array)$users),

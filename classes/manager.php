@@ -565,6 +565,16 @@ class manager {
         return $words[1];
     }
 
+   
+    public function set_order($courseInMastercourseId, $sortOrder) {
+        global $DB;
+      
+        $record_to_insert = new stdClass();
+        $record_to_insert->id = $courseInMastercourseId;       
+        $record_to_insert->sortorder = $sortOrder;
+        $DB->update_record('coursemaster_course', $record_to_insert, false);
+      
+    }
     
 
 }

@@ -15,7 +15,7 @@
     require_once($CFG->dirroot.'/local/mastercourse/classes/manager.php');
     require_once($CFG->dirroot.'/local/mastercourse/classes/form/edit.php');
     require_once($CFG->dirroot.'/local/mastercourse/classes/form/addcourseform.php');
-    $messages = $DB->get_records('local_message', null, 'id');
+   
     
     $messageid = optional_param('mastercourseid', null, PARAM_INT);
 

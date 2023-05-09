@@ -1,46 +1,6 @@
 
 <h4>Course list</h4>
-<div class="card-deck dashboard-card-deck one-row" data-region="items-list" role="list">
-  
-  
-  {{#courses}}
-    <div class="card dashboard-card" role="listitem"
-    data-region="course-content"
-    data-course-id="{id}">
-    <a href="{{courselink}}?id={{id}}" tabindex="-1">
-        <div class="card-img dashboard-card-img" style='background-image: url("{{courseimage}}");'>
-            <span class="sr-only">#straria:courseimage, core_course/str</span>
-        </div>
-    </a>
-    <div class="card-body pr-1 course-info-container" id="course-info-container-id-uniqid">
-        <div class="d-flex align-items-start">
-            <div class="w-100 text-truncate">
-                {{name}}
-                {{fullname}}
-               
-                    <div class="text-muted muted d-flex mb-1 flex-wrap">
-                        <span class="sr-only">
-                            #straria:courseshortname, core_course/str
-                        </span>
-                        <div>
-                {{shortname}}
-                        </div>
-                        
-                    </div>
-                
-            </div>
-        </div>
-        
-    </div>
-    <a class="btn btn-primary" onclick="return confirm('Are you sure you want to delete this item?');"  href="{{deletecourse}}?mastercourseid={{mastercourseId}}&courseid={{id}} ">Delete Course</a>
-</div> 
 
-
-
-{{/courses}}
-    
-
-</div>
         
 <form action="saveOrder.php" method="POST">
      
@@ -56,13 +16,13 @@
                     </th>
                     <th class="header c1" scope="col"><a data-sortable="1" data-sortby="firstname" data-sortorder="4"
                                     role="button"
-                                    href="http://localhost/moodle/user/index.php?id=12&amp;tsort=firstname&amp;tdir=4">Name Mastercourse
+                                    href="">Name Mastercourse
                                     <span class="accesshide ">Sort by First name Ascending</span></a> 
                             <div class="commands"></div>
                     </th>
                     <th class="header c2" scope="col"><a data-sortable="1" data-sortby="email" data-sortorder="4"
                                     role="button"
-                                    href="http://localhost/moodle/user/index.php?id=12&amp;tsort=email&amp;tdir=4">Description
+                                    href="">Description
                                     <span class="accesshide ">Sort by Email address Ascending</span></a>
                             <div class="commands"></div>
                     </th>

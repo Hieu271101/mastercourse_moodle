@@ -89,7 +89,7 @@
         'courselink' => new moodle_url('/course/view.php'),
     ];
     
- 
+    
    
     echo $OUTPUT->render_from_template('local_mastercourse/viewcourselistuser', $templatecontext);
         

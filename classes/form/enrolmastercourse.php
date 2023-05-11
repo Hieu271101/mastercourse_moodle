@@ -5,7 +5,7 @@ use moodleform;
 
 require_once("$CFG->libdir/formslib.php");
 
-class edit extends moodleform {
+class enrolmastercourse extends moodleform {
 
     //Add elements to form
     public function definition() {

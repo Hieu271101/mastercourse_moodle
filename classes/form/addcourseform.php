@@ -16,11 +16,7 @@ class addcourseform extends moodleform {
         $mform->addElement('select', 'idcourse', 'Select Course: ', $choices);
         $mform->setDefault('idcourse', '2');
         $mform->addElement('hidden', 'id', 'Enter id master course: '); // Add elements to your form
-        $mform->setType('id', PARAM_NOTAGS);  
-        // $mform->addElement('text', 'idcourse', 'Enter course name: '); // Add elements to your form
-        // $mform->setType('idcourse', PARAM_NOTAGS);                   //Set type of element
-        // $mform->setDefault('coursename', 'Please enter course name');        //Default value
-        
+        $mform->setType('id', PARAM_NOTAGS);    
         $this->add_action_buttons();
     }
     //Custom validation should be added here

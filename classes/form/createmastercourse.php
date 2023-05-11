@@ -1,6 +1,4 @@
 <?php
-
-// namespace local_mastercourse\form;
 use moodleform;
 
 require_once("$CFG->libdir/formslib.php");

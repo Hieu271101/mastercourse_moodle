@@ -1,10 +1,7 @@
 <?php
 
-// namespace local_mastercourse\form;
 use moodleform;
-
 require_once("$CFG->libdir/formslib.php");
-
 class deletecourseform extends moodleform {
     //Add elements to form
     public function definition() {

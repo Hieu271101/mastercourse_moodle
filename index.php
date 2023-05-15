@@ -56,9 +56,9 @@
 
     echo $OUTPUT->header();
     echo $OUTPUT->skip_link_target();
-
+    // get mastercourse from path variable
     $mastercourse = $DB->get_records('course_master', null, 'id');
-
+    //create object variable to use  template
     $templatecontext = (object)[
         'mastercourse' => array_values($mastercourse),
         'viewurl' => new moodle_url('/local/mastercourse/managemastercourse.php'),

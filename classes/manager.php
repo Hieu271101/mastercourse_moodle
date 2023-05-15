@@ -431,10 +431,13 @@
             
             foreach ($courseshasmastercourseid as $value) {
                 // delete user_enrol_mastercourse
+
+                // check user enrol master course and  is normal enrol
                 if($userEnrolMasterCourse = $DB->get_record('user_enrol_mastercourse', array('id_mastercourse'=>$idmastercourse, 
                                                             'id_user'=>$iduser,
                                                             'id_course'=>$value->id,
                                                             'is_normal_enrol'=>1))){
+                                                                    // delete user
                     $DB->delete_records('user_enrol_mastercourse', array('id'=>$userEnrolMasterCourse->id)); 
                 }
                 else if($userEnrolMasterCourse = $DB->get_record('user_enrol_mastercourse', 
@@ -459,10 +462,10 @@
                                     continue;
                                 }
                                 $instance = reset($instances);
-                                // $ue = $DB->get_record('user_enrolments', array('enrolid'=>$instance->id, 'userid'=>$user->id))
-                                if(!$uee = $DB->get_record('user_enrolments', array('enrolid'=>$instance->id, 
+                                // check user enrol before. check weird !
+                                if($uee = $DB->get_record('user_enrolments', array('enrolid'=>$instance->id, 
                                                                                     'userid'=>$iduser,
-                                                                                    'isenrol'=>1))){
+                                                                                    ))){
                                     $this->unenrol_try_internal_unenrol($value->id, $iduser);
                                 }
                         }

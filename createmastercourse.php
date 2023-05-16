@@ -36,9 +36,7 @@
 
     } else if ($fromform = $mform->get_data()) { // if the form is saved 
     $manager = new manager(); //initiate the manager of mastercourse 
-    
     $manager->createmastercourse($fromform->id, $fromform->name,$fromform->description); //
-
     // Go back to index.php page
     redirect($CFG->wwwroot . '/local/mastercourse/index.php', get_string('created_form', 'local_mastercourse') . $fromform->messagetext);
     }
@@ -54,9 +52,7 @@
       
         if (!$message) {
             throw new invalid_parameter_exception('Message not found');
-        }
-        
-        
+        }     
     } 
 
     echo $OUTPUT->header();

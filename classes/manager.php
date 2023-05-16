@@ -15,9 +15,6 @@
     class manager {
          /**
          * create master course
-         *
-         * 
-         *
          * @return \bool
          */
         public function createmastercourse(string $id, string $name, string $description): bool

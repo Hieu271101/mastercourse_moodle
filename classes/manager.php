@@ -630,6 +630,49 @@
             $DB->update_record('coursemaster_course', $record_to_insert, false);
         
         }
-        
+        // lấy ra bảng người dùng enrol vào các course nào
+        // làm vòng lặp
+        // check trong course_master xem có course nào trong mastercouese hay k
+        // nếu có: 
+        //          check xem kiểu enrol là như nào:
+        //              nếu là normal_enrol thì hiển thị
+        // nếu không:
+        // hiển thị
+        public function get_coures_not_in_mastercourse($userId) : array {
+            global $DB;
+            $userEnrol = (array)$DB->get_records_sql('SELECT * FROM `mdl_user_enrolments` WHERE userid = '. $userId);
+            
+            $courseUserEnrol = [];
+            foreach ($userEnrol as $value) {
+                
+                array_push($courseUserEnrol, (array)$DB->get_record_sql('SELECT * FROM `mdl_enrol` WHERE id = '. $value->enrolid));
+               
+            }
+            $coursesId = [];
+            foreach ($courseUserEnrol as $value) { 
+                array_push($coursesId, $value['courseid']);
+            }
+            // print_r($coursesId);
+            // exit();
+            $couseDisplay = [];
+            foreach ($coursesId as $value) { 
+                
+               if($ue =  $DB->get_record('user_enrol_mastercourse', array('id_user'=>$userId, 'id_course'=>$value))){
+                    if($ue->is_normal_enrol == 1){
+                        array_push($couseDisplay, $value);
+                    }
+               }
+               else{
+                         array_push($couseDisplay, $value);
+               }
+               
+                
+            }
+            
+            // $courseInMastercourse = (array)$DB->get_records_sql('SELECT * FROM   ');
+            $courses = (array)$DB->get_records_list('course', 'id',$couseDisplay);
+            
+            return $courses;
+        }
 
     }

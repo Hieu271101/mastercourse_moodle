@@ -56,6 +56,52 @@
             redirect($CFG->wwwroot . '/my/mastercourse.php', get_string('cancelled_form', 'local_mastercourse'));
         }                               
        
+        require_once($CFG->dirroot.'/local/mastercourse/classes/lib.php');
+        $lib = new lib(); 
+// require_once($CFG->dirroot.'/mod/page/lib.php');
+// require_once($CFG->dirroot.'/mod/page/locallib.php');
+// require_once($CFG->libdir.'/completionlib.php');
+
+// $id      =  325; // Course Module ID
+// $p       = optional_param('p', 0, PARAM_INT);  // Page instance ID
+// $inpopup = optional_param('inpopup', 0, PARAM_BOOL);
+
+// if ($p) {
+//     if (!$page = $DB->get_record('page', array('id'=>$p))) {
+//         throw new \moodle_exception('invalidaccessparameter');
+//     }
+//     $cm = get_coursemodule_from_instance('page', $page->id, $page->course, false, MUST_EXIST);
+
+// } else {
+//     if (!$cm = get_coursemodule_from_id('page', $id)) {
+//         throw new \moodle_exception('invalidcoursemodule');
+//     }
+//     $page = $DB->get_record('page', array('id'=>$cm->instance), '*', MUST_EXIST);
+// }
+
+// $course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
+
+// $lib->require_course_login($course, true, $cm);
+
+
+require_once($CFG->dirroot.'/course/lib.php');
+require_once($CFG->libdir.'/completionlib.php');
+
+redirect_if_major_upgrade_required();
+
+$id = 6;
+
+$params = array('id' => $id);
+$course = $DB->get_record('course', $params, '*', MUST_EXIST);
+
+// Prevent caching of this page to stop confusion when changing page after making AJAX changes
+$PAGE->set_cacheable(false);
+
+context_helper::preload_course($course->id);
+
+// $lib->require_login($course);
+
+
     // get master course from id
     $mastercourse = $DB->get_records('course_master', ['id' => $messageid]);
     // get  course from in mastercourse from id
@@ -73,10 +119,39 @@
                                 --  ON `mdl_role`.`id` = `mdl_user_enrol_mastercourse`.`role_id`  
                                  WHERE `mdl_user_enrol_mastercourse`.`id_mastercourse`= '.$messageid);
 
+    $sections = (array)$DB->get_records_sql('SELECT *  
+                                    FROM `mdl_course_sections`   WHERE `course`= 2');
+
+    foreach ($sections as $value) {
+        // mục tiêu bây giờ là lấy data từ sequence ra sau đó trỏ đến course module sau đó push course module vào trong record đấy nhưng vấn đề ở đây là mỗi cái nó khác nhau đổ ra k kịp nên là bây gi
+        $value->sequence = 
+        $course_module = (array)$DB->get_records_sql('SELECT *  
+                                    FROM `mdl_course_modules`   WHERE `id`= '.$value);
+    }
+    $courseModule =  $DB->get_records_sql(' SELECT cm.*, cs.name
+                                            FROM mdl_course_sections as cs
+                                            JOIN mdl_course_modules as cm
+                                            ON FIND_IN_SET(cm.id, cs.sequence) > 0
+                                            WHERE cs.course = 2
+                                            ' );
+                    
+
+    print_r($courseModule);
+    exit();
+    // SELECT cm.*
+    // FROM mdl_course_sections as cs
+    // JOIN mdl_course_modules as cm
+    // ON FIND_IN_SET(cm.id, cs.sequence) > 0
+    // WHERE cs.course = 2
+    // ;
+
+
+  
     $templatecontext = (object)[
-        'users' => array_values((array)$users),
-        'mastercourse' => array_values((array)$mastercourse),
-        'courses' => array_values((array)$course),
+        'users' => array_values((array) $users),
+        'course_section' => array_values((array) $sections),
+        'mastercourse' => array_values((array) $mastercourse),
+        'courses' => array_values((array) $course),
         'mastercourseId' => $messageid,
         'addcourse' => new moodle_url('/local/mastercourse/addcourse.php'),
         'deletecourse'  => new moodle_url('/local/mastercourse/deletecourses.php'),
@@ -84,10 +159,12 @@
         'enrolmastercourse' => new moodle_url('/local/mastercourse/enrolmastercourses.php'),
         'unenrolmastercourse' => new moodle_url('/local/mastercourse/unenrolmastercourses.php'),
         'courselink' => new moodle_url('/course/view.php'),
+
     ];
     // display page
     echo $OUTPUT->header();
     echo $OUTPUT->render_from_template('local_mastercourse/viewcourselistuser', $templatecontext);
+    echo $OUTPUT->render_from_template('local_mastercourse/sidemastercourse', $templatecontext);
     echo $OUTPUT->footer();
 
 ?>
